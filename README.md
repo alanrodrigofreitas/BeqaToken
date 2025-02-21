@@ -1,24 +1,29 @@
-# Beqa (BEQA) - ERC-20 Token
+# Beqa Token (BEQA)
 
 ## Descrição
-**Beqa (BEQA)** é um token ERC-20 desinflacionário desenvolvido na rede **Polygon Mainnet**, seguindo padrões da OpenZeppelin. O contrato implementa funcionalidades essenciais para um token moderno, incluindo permissões de queima, assinatura off-chain (permit) e governança via propriedade (Ownable).
+Beqa (BEQA) é um token ERC-20 desenvolvido com a biblioteca OpenZeppelin. Ele inclui funcionalidades avançadas como queima de tokens, permissões de assinatura (EIP-2612) e controle de propriedade para cunhagem segura.
 
-## Características Principais
-- **Nome do Token:** Beqa
-- **Símbolo:** BEQA
-- **Fornecimento Inicial:** 50.000.000 BEQA
-- **Decimais:** 18
-- **Compatível com OpenZeppelin Contracts ^5.0.0**
-- **Extensões Implementadas:**
-  - `ERC20` - Padrão básico ERC-20.
-  - `ERC20Burnable` - Permite que tokens sejam queimados.
-  - `ERC20Permit` - Suporte para assinaturas off-chain.
-  - `Ownable` - Controle de propriedade e governança.
+## Recursos
+- **ERC-20 Padrão**: Baseado em OpenZeppelin para segurança e compatibilidade.
+- **Burnable**: Tokens podem ser queimados pelo detentor.
+- **Ownable**: Apenas o dono do contrato pode cunhar novos tokens.
+- **Permit (EIP-2612)**: Autoriza transações sem necessidade de aprovações on-chain.
+- **Fornecimento Inicial**: 50.000.000 BEQA.
 
-## Implementação do Contrato
-O contrato **Beqa** foi projetado para ser gerenciado por um proprietário inicial definido na implantação. Esse proprietário pode cunhar novos tokens conforme necessário.
+## Tecnologias Utilizadas
+- Solidity ^0.8.22
+- OpenZeppelin Contracts 5.0.0
 
+## Implementação
 ```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.22;
+
+import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import {ERC20Burnable} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
+import {ERC20Permit} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+
 contract Beqa is ERC20, ERC20Burnable, Ownable, ERC20Permit {
     constructor(address initialOwner)
         ERC20("Beqa", "BEQA")
@@ -34,43 +39,10 @@ contract Beqa is ERC20, ERC20Burnable, Ownable, ERC20Permit {
 }
 ```
 
-## Funções
-### 1. **Minting (Cunhagem)**
-A função `mint` permite que o proprietário gere novos tokens e os envie para um endereço específico.
-```solidity
-function mint(address to, uint256 amount) public onlyOwner {
-    _mint(to, amount);
-}
-```
-**Parâmetros:**
-- `to` - Endereço que receberá os tokens.
-- `amount` - Quantidade de tokens a serem criados.
-
-**Restrições:**
-- Apenas o proprietário (`onlyOwner`) pode executar essa função.
-
-### 2. **Burning (Queima)**
-Os tokens podem ser permanentemente removidos da circulação pelo próprio titular, reduzindo a oferta total.
-```solidity
-function burn(uint256 amount) public {
-    _burn(msg.sender, amount);
-}
-```
-**Parâmetros:**
-- `amount` - Quantidade de tokens a serem queimados.
-
-### 3. **Permit (Assinaturas Off-Chain)**
-A função `ERC20Permit` permite aprovação de transações sem que o usuário precise enviar uma transação on-chain, reduzindo custos com gas.
-
-## Implantação na Polygon
-O contrato foi projetado para ser implantado na **Polygon Mainnet** usando **Remix - Ethereum IDE**.
-
-### **Passos para Implantar**
-1. Acesse o [Remix Ethereum IDE](https://remix.ethereum.org/)
-2. Carregue o arquivo do contrato `Beqa.sol`
-3. Compilar com `Solidity ^0.8.22`
-4. Selecionar **Injected Provider - MetaMask** e conectar à rede **Polygon Mainnet**
-5. Implantar o contrato passando o endereço do proprietário inicial
+## Como Usar
+1. **Deploy**: Utilize Remix, Hardhat ou Truffle para implantar o contrato.
+2. **Cunhar Tokens**: O proprietário pode cunhar novos BEQA com `mint(address to, uint256 amount)`.
+3. **Queimar Tokens**: Qualquer detentor pode chamar `burn(uint256 amount)`.
 
 ## Licença
-Este projeto está licenciado sob a [MIT License](https://opensource.org/licenses/MIT).
+Distribuído sob a licença MIT.
